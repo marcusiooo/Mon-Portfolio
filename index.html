@@ -296,14 +296,45 @@
       </div>
       <div class="contact-form-wrap">
        <h3 class="form-title">Demandez un devis</h3>
+       <!-- ✅ Formulaire Netlify corrigé -->
        <form id="contact-form" name="contact" method="POST" data-netlify="true" novalidate>
+        <input type="hidden" name="form-name" value="contact">
         <div class="form-row">
-         <div class="form-group"><label for="field-name">Votre nom</label><input type="text" <input type="text" id="field-name" name="nom" placeholder="Jean Dupont" required></div>
-         <div class="form-group"><label for="field-email">Email</label><input type="email" <input type="email" id="field-email" name="email" placeholder="vous@email.com" required></div>
+         <div class="form-group">
+          <label for="field-name">Votre nom</label>
+          <input type="text" id="field-name" name="nom" placeholder="Jean Dupont" required>
+         </div>
+         <div class="form-group">
+          <label for="field-email">Email</label>
+          <input type="email" id="field-email" name="email" placeholder="vous@email.com" required>
+         </div>
         </div>
-        <div class="form-group"><label for="field-service">Type de projet</label><select <select id="field-service" name="type-de-projet"><option value="">Choisir un service...</option> un service...</option><option>Publicité commerciale</option><option>Clip musical</option><option>Vidéo corporate</option><option>Court métrage</option><option>Contenu réseaux sociaux</option><option>Autre</option></select></div>
-        <div class="form-group"><label for="field-budget">Budget estimé</label><select <select id="field-budget" name="budget"><option value="">Sélectionner...</option>...</option><option>Moins de 100 000 FCFA</option><option>100 000 – 300 000 FCFA</option><option>300 000 – 700 000 FCFA</option><option>Plus de 700 000 FCFA</option></select></div>
-        <div class="form-group"><label for="field-message">Décrivez votre projet</label><textarea <textarea id="field-message" name="message" placeholder="Parlez-moi de votre vision, vos attentes, le délai souhaité..."></textarea></div>
+        <div class="form-group">
+         <label for="field-service">Type de projet</label>
+         <select id="field-service" name="type-de-projet">
+          <option value="">Choisir un service...</option>
+          <option>Publicité commerciale</option>
+          <option>Clip musical</option>
+          <option>Vidéo corporate</option>
+          <option>Court métrage</option>
+          <option>Contenu réseaux sociaux</option>
+          <option>Autre</option>
+         </select>
+        </div>
+        <div class="form-group">
+         <label for="field-budget">Budget estimé</label>
+         <select id="field-budget" name="budget">
+          <option value="">Sélectionner...</option>
+          <option>Moins de 100 000 FCFA</option>
+          <option>100 000 – 300 000 FCFA</option>
+          <option>300 000 – 700 000 FCFA</option>
+          <option>Plus de 700 000 FCFA</option>
+         </select>
+        </div>
+        <div class="form-group">
+         <label for="field-message">Décrivez votre projet</label>
+         <textarea id="field-message" name="message" placeholder="Parlez-moi de votre vision, vos attentes, le délai souhaité..."></textarea>
+        </div>
         <button type="submit" class="form-submit"><i data-lucide="send" style="width:17px;height:17px;"></i> Envoyer ma demande</button>
        </form>
       </div>
@@ -323,15 +354,6 @@
   </div>
 
   <script>
-  // ═══════════════════════════════════════════════════════════════════
-  //  PROJETS — Modifie ici pour ajouter/changer tes vidéos
-  //
-  //  type: "youtube"    → youtubeId: "XXXXXXXXXXX"
-  //  type: "instagram"  → instagramUrl: "https://www.instagram.com/p/XXXXX/"
-  //  type: "mp4"        → videoSrc: "videos/fichier.mp4"  +  poster: "" (optionnel)
-  //
-  //  duration: "" si tu ne veux pas afficher de durée
-  // ═══════════════════════════════════════════════════════════════════
   const PROJECTS = [
     {
       id: 1,
@@ -386,17 +408,13 @@
   function renderProjects(filter) {
     const grid = document.getElementById('projects-grid');
     const data = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.category === filter);
-
     [...grid.children].forEach(card => {
       if (!data.find(p => p.id === parseInt(card.dataset.projectId))) card.remove();
     });
-
     data.forEach(p => {
       if (grid.querySelector(`[data-project-id="${p.id}"]`)) return;
-
       const ytId = p.type === 'youtube' ? extractYoutubeId(p.youtubeId) : null;
       const thumbSrc = p.type === 'youtube' ? getYouTubeThumbnail(ytId) : (p.poster || '');
-
       let thumbInner = '';
       if (p.type === 'instagram') {
         const igBg = thumbSrc
@@ -424,7 +442,6 @@
           ${thumbSrc ? `<div class="thumb-img-wrap"><img src="${thumbSrc}" alt="${p.title}" loading="lazy"></div>` : `<div class="thumb-img-wrap" style="background:var(--bg-mid);"></div>`}
           <video class="thumb-video" src="${p.videoSrc}" muted loop preload="none" playsinline></video>`;
       }
-
       const card = document.createElement('article');
       card.className = 'project-card' + (p.type === 'instagram' ? ' ig-card' : '');
       card.dataset.projectId = p.id;
@@ -442,13 +459,11 @@
           <p class="project-client">${p.client}</p>
           <div class="project-tech">${p.techs.map(t => `<span class="tech-pill">${t}</span>`).join('')}</div>
         </div>`;
-
       if (p.type === 'mp4') {
         const video = card.querySelector('.thumb-video');
         card.addEventListener('mouseenter', () => video.play().catch(() => {}));
         card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
       }
-
       if (p.type === 'instagram') {
         card.addEventListener('click', () => window.open(p.instagramUrl, '_blank', 'noopener,noreferrer'));
         card.addEventListener('keydown', e => { if (e.key === 'Enter') window.open(p.instagramUrl, '_blank', 'noopener,noreferrer'); });
@@ -456,10 +471,8 @@
         card.addEventListener('click', () => openModal(p));
         card.addEventListener('keydown', e => { if (e.key === 'Enter') openModal(p); });
       }
-
       grid.appendChild(card);
     });
-
     lucide.createIcons();
     setTimeout(() => {
       [...grid.querySelectorAll('.project-card:not(.visible)')].forEach((c, i) => setTimeout(() => c.classList.add('visible'), i * 100));
@@ -539,14 +552,25 @@
     });
   }, { threshold: 0.5 });
 
-  document.getElementById('document.getElementById('contact-form').addEventListener('submit', function(e) {   e.preventDefault();   const name = document.getElementById('field-name').value.trim();   const email = document.getElementById('field-email').value.trim();   if (!name || !email) { document.getElementById('field-name').focus(); return; }    const btn = this.querySelector('.form-submit');   btn.disabled = true;   btn.innerHTML = `<i data-lucide="loader" style="width:17px;height:17px;animation:spin 1s linear infinite;"></i> Envoi en cours...`;   lucide.createIcons();    // Envoi réel à Netlify   const formData = new FormData(this);   fetch('/', {     method: 'POST',     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },     body: new URLSearchParams(formData).toString()   })   .then(() => {     btn.disabled = false;     btn.innerHTML = `<i data-lucide="send" style="width:17px;height:17px;"></i> Envoyer ma demande`;     lucide.createIcons();     this.reset();     const t = document.getElementById('toast');     t.classList.add('show');     setTimeout(() => t.classList.remove('show'), 4500);   })   .catch(() => {     btn.disabled = false;     btn.innerHTML = `<i data-lucide="send" style="width:17px;height:17px;"></i> Envoyer ma demande`;     lucide.createIcons();     alert('Erreur lors de l\'envoi. Réessaie.');   }); });, function(e) {
+  // ✅ Soumission formulaire — envoie réellement à Netlify
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    if (!document.getElementById('field-name').value.trim() || !document.getElementById('field-email').value.trim()) { document.getElementById('field-name').focus(); return; }
+    const name = document.getElementById('field-name').value.trim();
+    const email = document.getElementById('field-email').value.trim();
+    if (!name || !email) { document.getElementById('field-name').focus(); return; }
+
     const btn = this.querySelector('.form-submit');
     btn.disabled = true;
     btn.innerHTML = `<i data-lucide="loader" style="width:17px;height:17px;animation:spin 1s linear infinite;"></i> Envoi en cours...`;
     lucide.createIcons();
-    setTimeout(() => {
+
+    const formData = new FormData(this);
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString()
+    })
+    .then(() => {
       btn.disabled = false;
       btn.innerHTML = `<i data-lucide="send" style="width:17px;height:17px;"></i> Envoyer ma demande`;
       lucide.createIcons();
@@ -554,7 +578,13 @@
       const t = document.getElementById('toast');
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 4500);
-    }, 1400);
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.innerHTML = `<i data-lucide="send" style="width:17px;height:17px;"></i> Envoyer ma demande`;
+      lucide.createIcons();
+      alert("Erreur lors de l'envoi. Réessaie.");
+    });
   });
 
   renderProjects('all');
